@@ -4,8 +4,40 @@
 {% block title %}Home page{% endblock title %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <img src="{% static 'images/logo.png' %}" class="img-fluid" alt="DjangoX logo"/>
-  <p class="lead">A Django starter project with batteries.</p>
-</div>
+     {% for Project in object_list %}
+        <div class="col-md-8  mb-5 my-2">
+            <div class="d-flex flex-column comment-section">
+                <div class="bg-white p-2">
+                    <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{% static 'images/logo.png' %}" width="40">
+                        <div class="d-flex flex-column justify-content-start">
+                            <span class="d-block font-weight-bold name text-black-50">Topic Name:
+                             <a class="link-success text-decoration-none" href='{% url 'details' Project.pk %}'> {{ Project.topic_title }}</a> <br>
+                            <small>by:</small> {{ Project.topic_author.first_name }} {{ Project.topic_author.last_name }}
+
+                                {% if user.is_authenticated %}
+                                <a class="text-decoration-none" href="{% url 'update_Topic' Project.pk%}">edit topic</a> | <a class="text-danger text-decoration-none ml-2" href="{% url 'delete_topic' Project.pk%}">delete topic</a>
+                                {% endif %}
+
+                            </span>
+                            <span class="date text-black-50">
+                                {{ Project.topic_date }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="comment-text">{{ Project.topic_body }}</p>
+                    </div>
+                </div>
+                <div class="bg-white">
+                    <div class="d-flex flex-row fs-12">
+                        <div class="like p-2 cursor"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
+                    </div>
+                </div>
+                <div class="bg-light p-2">
+                    <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="{% static 'images/logo.png' %}" width="40"><textarea class="form-control ml-1 shadow-none textarea"></textarea></div>
+                    <div class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="button">Post comment</button> <button class="btn btn-outline-primary btn-sm ml-2 shadow-none" type="button">Cancel</button></div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock content %}
